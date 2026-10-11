@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="OnlineShop.IdentityService.Application/OnlineShop.IdentityService.Application.csproj" />
+    <Project Path="OnlineShop.IdentityService.Domain/OnlineShop.IdentityService.Domain.csproj" />
+    <Project Path="OnlineShop.IdentityService.Infrastructure/OnlineShop.IdentityService.Infrastructure.csproj" />
+    <Project Path="OnlineShop.IdentityService.WebApi/OnlineShop.IdentityService.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="OnlindeShop.IdentityService.UnitTests/OnlindeShop.IdentityService.UnitTests.csproj" />
+  </Folder>
+</Solution>
