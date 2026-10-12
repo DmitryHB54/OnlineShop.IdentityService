@@ -20,5 +20,9 @@
   <ItemGroup>
     <ProjectReference Include="..\OnlineShop.IdentityService.Application\OnlineShop.IdentityService.Application.csproj" />
   </ItemGroup>
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App"/>
+	</ItemGroup>
 
 </Project>

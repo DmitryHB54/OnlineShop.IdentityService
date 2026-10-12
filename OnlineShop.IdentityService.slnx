@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yml" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="OnlineShop.IdentityService.Application/OnlineShop.IdentityService.Application.csproj" />
     <Project Path="OnlineShop.IdentityService.Domain/OnlineShop.IdentityService.Domain.csproj" />
