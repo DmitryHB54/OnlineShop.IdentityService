@@ -7,7 +7,7 @@ public class RefreshToken
 
     ///<summary>Хеш токена (не сам токен!).</summary>
     public string TokenHash { get; set; } = null!;
-    public DateTime ExpireAt { get; set; }
+    public DateTime ExpiresAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public DateTime? RevokedAt { get; set; }
@@ -15,6 +15,6 @@ public class RefreshToken
 
     ///<summary>Id токена, которым заменен текущий (дла rotation)</summary>
     public Guid? ReplacedByTokenId { get; set; }
-    public bool IsActive => RevokedAt is null && DateTime.UtcNow < ExpireAt;
+    public bool IsActive => RevokedAt is null && DateTime.UtcNow < ExpiresAt;
 
 }

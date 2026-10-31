@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.IdentityService.Application.Common.Interfaces;
+using OnlineShop.IdentityService.Application.Common.Settings;
 using OnlineShop.IdentityService.Domain.Entities;
 using OnlineShop.IdentityService.Infrastructure.Persistence;
+using OnlineShop.IdentityService.Infrastructure.Services;
 
 namespace OnlineShop.IdentityService.Infrastructure;
 public static class DependencyInjection
@@ -18,7 +21,7 @@ public static class DependencyInjection
         services.AddDbContext<IdentityDbContext>(options => 
             options.UseNpgsql(connectionString));
 
-        services.AddIdentityApiEndpoints<ApplicationUser>(options => 
+        services.AddIdentityCore<ApplicationUser>(options => 
         {
             options.Password.RequiredLength = 8;
             options.Password.RequireDigit = true;
@@ -34,6 +37,10 @@ public static class DependencyInjection
         .AddRoles<ApplicationRole>()
         .AddEntityFrameworkStores<IdentityDbContext>()
         .AddDefaultTokenProviders();
+
+        services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
+        services.AddScoped<ITokenService, JwtTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
         return services;
     }
