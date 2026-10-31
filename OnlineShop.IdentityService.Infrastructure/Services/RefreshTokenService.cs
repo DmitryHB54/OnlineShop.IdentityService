@@ -30,6 +30,7 @@ public class RefreshTokenService(
 
         return rawToken;
     }
+
     public async Task<Guid?> ValidationAsync(string rawToken, CancellationToken ct = default)
     {
         var tokenHash = tokenService.HashToken(rawToken);
