@@ -1,5 +1,6 @@
 using OnlineShop.IdentityService.Application;
 using OnlineShop.IdentityService.Infrastructure;
+using OnlineShop.IdentityService.Infrastructure.Persistence.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+await RoleSeeder.SeedAsync(app.Services);
 
 app.Run();
 
