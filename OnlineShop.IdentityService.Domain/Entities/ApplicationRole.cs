@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 namespace OnlineShop.IdentityService.Domain.Entities;
+
 public class ApplicationRole : IdentityRole<Guid>
 {
     public string? Description { get; set; }
