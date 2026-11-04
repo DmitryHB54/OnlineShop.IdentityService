@@ -35,10 +35,11 @@ public class RefreshTokenService(
     {
         var tokenHash = tokenService.HashToken(rawToken);
         var token = await dbContext.RefreshTokens
-            .FirstOrDefaultAsync(t => t.TokenHash == tokenHash, ct);
+            .FirstOrDefaultAsync(t => t.TokenHash == tokenHash, ct)
+            ?? throw new InvalidOperationException("Refresh token not found"); ;
 
-        if (token is null || !token.IsActive)
-            return null;
+        if (!token.IsActive)
+            throw new InvalidOperationException("Refresh token is not active");
 
         return token.UserId;
     }
@@ -48,10 +49,11 @@ public class RefreshTokenService(
         var tokenHash = tokenService.HashToken(rawToken);
 
         var token = await dbContext.RefreshTokens
-            .FirstOrDefaultAsync(t => t.TokenHash == tokenHash, ct); ;
+            .FirstOrDefaultAsync(t => t.TokenHash == tokenHash, ct)
+            ?? throw new InvalidOperationException("Refresh token not found"); ;
 
-        if (token is null || token.RevokedAt is not null)
-            return;
+        if (token.RevokedAt is not null)
+            throw new InvalidOperationException("Refresh token is already revoked");
 
         token.RevokedAt = DateTime.UtcNow;
         token.RevokedReason = reason;

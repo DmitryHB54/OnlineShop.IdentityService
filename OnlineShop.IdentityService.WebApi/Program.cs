@@ -1,29 +1,31 @@
 using OnlineShop.IdentityService.Application;
 using OnlineShop.IdentityService.Infrastructure;
 using OnlineShop.IdentityService.Infrastructure.Persistence.Seeders;
+using OnlineShop.IdentityService.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicaton();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddGlobalExtensionHandling();
+builder.Services.AddAuthentication(builder.Configuration);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerConfiguration();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(cfg =>
-    {
-        cfg.SwaggerEndpoint("swagger/v1/swagger/json", "Identity API V1");
-        cfg.RoutePrefix = string.Empty;
-    });
-}
+await app.ApplyMigrationsAsync();
+
+app.UseExceptionHandler();
+app.UseSwaggerDocumentation(app.Environment);
 
 app.UseHttpsRedirection();
+app.UseAuthentication();   
+app.UseAuthorization();
+
 app.MapControllers();
 
 await RoleSeeder.SeedAsync(app.Services);
