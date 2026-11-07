@@ -1,6 +1,9 @@
-﻿using MediatR;
+﻿using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using OnlineShop.IdentityService.Application.Common.Interfaces;
+using OnlineShop.Shared.Contracts;
 using OnlineShop.IdentityService.Domain.Constants;
 using OnlineShop.IdentityService.Domain.Entities;
 
@@ -8,7 +11,9 @@ namespace OnlineShop.IdentityService.Application.Features.Auth.Commands.Register
 public class RegisterCommandHandler(
     UserManager<ApplicationUser> userManager,
     ITokenService tokenService,
-    IRefreshTokenService refreshTokenService) : IRequestHandler<RegisterCommand, AuthResponse>
+    IRefreshTokenService refreshTokenService,
+    IPublishEndpoint publishEndpoint,
+    ILogger<RegisterCommandHandler> logger) : IRequestHandler<RegisterCommand, AuthResponse>
 {
     public async Task<AuthResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
@@ -39,6 +44,15 @@ public class RegisterCommandHandler(
 
         var accessToken = tokenService.GenerateAccessToken(user, roles);
         var refreshToken = await refreshTokenService.CreateAsync(user.Id, cancellationToken);
+
+        logger.LogInformation("Publishing UserRegistered for {Email}", user.Email);
+        await publishEndpoint.Publish(new UserRegistered(
+            user.Id,
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            user.CreatedAt));
+        logger.LogInformation("UserRegistered published");
 
         return new AuthResponse(
             accessToken,
