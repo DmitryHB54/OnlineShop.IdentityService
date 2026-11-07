@@ -10,6 +10,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddGlobalExtensionHandling();
 builder.Services.AddAuthentication(builder.Configuration);
+builder.Services.AddRabbitMq();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
